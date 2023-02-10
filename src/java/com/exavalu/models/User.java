@@ -31,8 +31,11 @@ public class User extends ActionSupport implements ApplicationAware, SessionAwar
     private String lastName;
     private String emailAddess;
     private String password;
-//    private int status;
+    private String countryCode;
+    private String stateCode;
+    private String distCode;
 
+//    private int status;
     /**
      * @return the firstName
      */
@@ -89,6 +92,48 @@ public class User extends ActionSupport implements ApplicationAware, SessionAwar
         this.password = password;
     }
 
+    /**
+     * @return the countryCode
+     */
+    public String getCountryCode() {
+        return countryCode;
+    }
+
+    /**
+     * @param countryCode the countryCode to set
+     */
+    public void setCountryCode(String countryCode) {
+        this.countryCode = countryCode;
+    }
+
+    /**
+     * @return the stateCode
+     */
+    public String getStateCode() {
+        return stateCode;
+    }
+
+    /**
+     * @param stateCode the stateCode to set
+     */
+    public void setStateCode(String stateCode) {
+        this.stateCode = stateCode;
+    }
+
+    /**
+     * @return the distCode
+     */
+    public String getDistCode() {
+        return distCode;
+    }
+
+    /**
+     * @param distCode the distCode to set
+     */
+    public void setDistCode(String distCode) {
+        this.distCode = distCode;
+    }
+
     private SessionMap<String, Object> sessionMap = (SessionMap) ActionContext.getContext().getSession();
 
     private ApplicationMap map = (ApplicationMap) ActionContext.getContext().getApplication();
@@ -107,7 +152,7 @@ public class User extends ActionSupport implements ApplicationAware, SessionAwar
         String result = "FAILURE";
 
         boolean success = LoginService.getInstance().doLogin(this);
-        ArrayList emp=EmployeeService.getInstance().getAllEmployees();
+        ArrayList emp = EmployeeService.getInstance().getAllEmployees();
         ArrayList deptList = DepartmentService.getInstance().getAllDepartment();
         ArrayList roleList = RoleService.getInstance().getAllRole();
 
@@ -115,7 +160,7 @@ public class User extends ActionSupport implements ApplicationAware, SessionAwar
             System.out.println("returning Success from doLogin method");
             sessionMap.put("Loggedin", this);
             result = "SUCCESS";
-            sessionMap.put("empList",emp);
+            sessionMap.put("empList", emp);
             sessionMap.put("DeptList", deptList);
             sessionMap.put("RoleList", roleList);
         } else {
@@ -124,13 +169,62 @@ public class User extends ActionSupport implements ApplicationAware, SessionAwar
 
         return result;
     }
-    
-    public String doLogout(){
+
+    public String doLogout() {
         String result = "SUCCESS";
         sessionMap.clear();
+        System.out.println("SESSION CLEARED");
         return result;
     }
     
+    public String doCancel() {
+        String result = "SUCCESS";
+        sessionMap.clear();
+        System.out.println("SESSION CLEARED");
+        return result;
+    }
+
+
+    public String doPreSignUp() throws Exception {
+        String result = "SUCCESS";
+
+        ArrayList countryList = LoginService.getAllCountries();
+        ArrayList stateList = null;
+        ArrayList distList = null;
+
+        sessionMap.put("CountryList", countryList);
+
+        System.out.println("Country Code=" + this.countryCode);
+        
+        sessionMap.put("User", this);
+
+        if (this.countryCode != null && this.stateCode != null) {
+            distList = LoginService.getAllDistricts(this.stateCode);
+            sessionMap.put("DistList", distList);
+//            sessionMap.put("User", this);
+            
+        }
+
+        if (this.countryCode != null) {
+            stateList = LoginService.getAllStates(this.countryCode);
+            sessionMap.put("StateList", stateList);
+//            sessionMap.put("User", this);
+        }
+        if (this.firstName != null && this.firstName.length()>0 && this.lastName != null && this.lastName.length()>0 && this.emailAddess != null && this.emailAddess.length()>0 && this.password!= null && this.password.length()>0 && this.stateCode != null && this.stateCode.length() > 0 && this.countryCode != null && this.countryCode.length() > 0 && this.distCode != null && this.distCode.length() > 0) {
+            boolean success = LoginService.getInstance().doSignUp(this);
+
+            if (success) {
+                result = "DONE";
+                sessionMap.put("SuccessSignUp", "Successfully Registered !!");
+
+            } 
+            System.out.println(sessionMap);
+            return result;
+        }
+
+        return result;
+    }
+
     public String doSignUp() throws Exception {
         String result = "FAILURE";
         boolean success = LoginService.getInstance().doSignUp(this);
@@ -148,7 +242,4 @@ public class User extends ActionSupport implements ApplicationAware, SessionAwar
 
     }
 
-    
-    
-    
 }

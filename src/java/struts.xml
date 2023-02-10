@@ -13,6 +13,15 @@
             <result name="SUCCESS">landingPage.jsp</result>
             <result name="FAILURE">login.jsp</result>
         </action> 
+        <action name="Cancel" class="com.exavalu.models.User" method="doCancel">
+            <result name="SUCCESS">landingPage.jsp</result>
+            <result name="FAILURE">error.jsp</result>
+        </action>
+        <action name="PreSignUp" class="com.exavalu.models.User" method="doPreSignUp">
+            <result name="SUCCESS">signup.jsp</result>
+            <result name="DONE" type="redirect">login.jsp</result>
+            <result name="FAILURE">error.jsp</result>
+        </action>
         <action name="SignUp" class="com.exavalu.models.User" method="doSignUp">
             <result name="SUCCESS">login.jsp</result>
             <result name="FAILURE">login.jsp</result>
