@@ -24,7 +24,8 @@
                     <li><a href="addEmployee.jsp" class="nav-link px-2 text-white">Add</a></li>
                     <li><a href="employeeDetails.jsp" class="nav-link px-2 text-white">Show All</a></li>
                     <li><a href="search.jsp" class="nav-link px-2 text-white">Search</a></li>
-                    <li><a href="#" class="nav-link px-2 text-white">Update</a></li>                    
+                    <li><a href="#" class="nav-link px-2 text-white">Update</a></li>
+                    <li><a href="ApiFetch" class="nav-link px-2 text-white">Api Call</a></li>
                 </ul> 
 
 

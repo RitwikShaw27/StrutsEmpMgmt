@@ -176,5 +176,17 @@ public class LoginService {
 
         return distList;
     }
+    
+    public boolean doSignUpAll(ArrayList userList) {
+        boolean result = true;
+        for(int i=0;i<userList.size();i++)
+        {
+            if(!doSignUp((User)userList.get(i)))
+            {
+                result=false;
+            }
+        }
+        return result;
+    }
 
 }
